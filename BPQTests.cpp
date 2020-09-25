@@ -15,9 +15,9 @@ void ContainsTest() {
 	GraphNode *a = g.AddNode('a');
 	DNode n;
 	n.node = a;
-	q.push(a);
+	q.push(n);
 
-	assert(q.Contains(a) == 0);
+	assert(q.Contains(n) == 0);
 	
 
 	// more tests go here!

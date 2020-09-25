@@ -7,7 +7,22 @@ using namespace std;
 
 
 Graph::~Graph(){
-    
+    for(unsigned int i = 0; i < nodeList.size(); i++){
+        delete (nodeList.at(i));
+    }
+
+    nodeList.clear();
+
+    for(unsigned int i = 0; i < adjacencyMatrix.size(); i++){
+        for(unsigned int j = 0; j < adjacencyMatrix.at(i).size(); j++){
+            delete (adjacencyMatrix.at(i).at(j));
+
+        }
+        adjacencyMatrix.at(i).clear();
+    }
+
+    adjacencyMatrix.clear();
+
 }
 
 GraphNode* Graph::AddNode(char key, int data){
@@ -15,7 +30,7 @@ GraphNode* Graph::AddNode(char key, int data){
     gn->key = key;
     gn->data = data;
 
-    this->nodeList.push_back(*gn);
+    this->nodeList.push_back(gn);
     
     return gn;
     
@@ -29,22 +44,22 @@ GraphEdge* Graph::AddEdge(GraphNode *gn1, GraphNode *gn2, unsigned int weight){
     ge->weight = weight;
 
     //add new edge to adjacency list???
-    vector<GraphEdge> temp;
+    vector<GraphEdge*> temp;
 
     if(this->adjacencyMatrix.size()!=0){
         for(unsigned int i = 0; i < this->adjacencyMatrix.size(); i++){
-            if(ge->from->key == this->adjacencyMatrix.at(i).front().from->key){
-                this->adjacencyMatrix.at(i).push_back(*ge);
+            if(ge->from->key == this->adjacencyMatrix.at(i).front()->from->key){
+                this->adjacencyMatrix.at(i).push_back(ge);
                 return ge;
             }
         }
 
-        temp.push_back(*ge);
+        temp.push_back(ge);
         adjacencyMatrix.push_back(temp);
         return ge;
     }
 
-    temp.push_back(*ge);
+    temp.push_back(ge);
     adjacencyMatrix.push_back(temp);
 
 
@@ -54,12 +69,17 @@ GraphEdge* Graph::AddEdge(GraphNode *gn1, GraphNode *gn2, unsigned int weight){
 string Graph::NodesToString() const{
     string result = "[";
     for(unsigned int i = 0; i < this->nodeList.size(); i++){
-        result = result + "(" + this->nodeList.at(i).key + ":" + to_string(this->nodeList.at(i).data) + ')';
-
-        result += ",";
+        result = result + "(" + this->nodeList.at(i)->key + ":" + to_string(this->nodeList.at(i)->data);
+        if(i != this->nodeList.size()-1){
+            result+="), ";
+        }
+        
+        else{
+            result += ")";
+        }
     }
-
-    result.at(result.size()-1) = ']';
+    
+    result+="]";
 
     return result;
 }
@@ -73,15 +93,21 @@ string Graph::ToString() const{
 
     while(x < this->nodeList.size()){
 
-        result = result + this->nodeList.at(x).key + " | ";
+        result = result + this->nodeList.at(x)->key + " | ";
     
         for(unsigned int i = 0; i < this->adjacencyMatrix.size(); i++){
-            if(adjacencyMatrix.at(i).front().from->key == nodeList.at(x).key){
+            if(this->adjacencyMatrix.at(i).front()->from->key == this->nodeList.at(x)->key){
                 for(unsigned j = 0; j < adjacencyMatrix.at(i).size(); j++){
-                    result = result + "[(" + this->adjacencyMatrix.at(i).at(j).from->key + ":" + to_string(this->adjacencyMatrix.at(i).at(j).from->data) + ")" +" -> (" + this->adjacencyMatrix.at(i).at(j).to->key + ":" + to_string(this->adjacencyMatrix.at(i).at(j).to->data) + ") w:" + to_string(this->adjacencyMatrix.at(i).at(j).weight) + "], ";
+                    result = result + "[(" + this->adjacencyMatrix.at(i).at(j)->from->key + ":" + to_string(this->adjacencyMatrix.at(i).at(j)->from->data) + ")" +"->(" + this->adjacencyMatrix.at(i).at(j)->to->key + ":" + to_string(this->adjacencyMatrix.at(i).at(j)->to->data) + ") w:" + to_string(this->adjacencyMatrix.at(i).at(j)->weight);
+                    if(j != adjacencyMatrix.at(i).size()-1){
+                        result += "], ";
+                    }
+
+                    else{
+                        result += "]";
+                    }
                 
                 }
-                result.at(result.size()-2) = '\0';
                 
             }
             
@@ -119,10 +145,10 @@ const vector<GraphEdge*>& Graph::GetEdges(const GraphNode *gn)const{
     vector<GraphEdge*> *temp = new vector<GraphEdge*>();
     
     for(unsigned int i = 0; i < this->adjacencyMatrix.size(); i++){
-        if(this->adjacencyMatrix.at(i).front().from->key == gn->key){
+        if(this->adjacencyMatrix.at(i).front()->from->key == gn->key){
             const GraphEdge *ge;
             for(unsigned j = 0; j < this->adjacencyMatrix.at(i).size(); j++){
-                ge = &(this->adjacencyMatrix.at(i).at(j));
+                ge = (this->adjacencyMatrix.at(i).at(j));
 
                 temp->push_back(new GraphEdge (*ge));
                 
@@ -141,7 +167,7 @@ const vector<GraphNode*>& Graph::GetNodes() const{
 
     for(unsigned int i = 0; i < this->nodeList.size(); i++){
         const GraphNode *gn;
-        gn = &(this->nodeList.at(i));
+        gn = (this->nodeList.at(i));
         temp->push_back(new GraphNode(*gn));
     }
 
@@ -151,16 +177,13 @@ const vector<GraphNode*>& Graph::GetNodes() const{
 }
 
 
-
-
-
 const GraphNode* Graph::NodeAt(unsigned int idx) const{
     if(idx >= this->nodeList.size()){
         cout << "Invalid Index" << endl;
         return nullptr;
     }
 
-    return &(this->nodeList.at(idx));
+    return (this->nodeList.at(idx));
 }
 
 
@@ -168,35 +191,3 @@ size_t Graph::Size() const{
     return this->nodeList.size();
 }
 
-
-
-int main()
-{
-    Graph g = Graph();
-    GraphNode *g3 = g.AddNode('g', 50);
-    GraphNode *g1 = g.AddNode('d', 29);
-    GraphNode *g5 = g.AddNode('r');
-    GraphNode *g6 = g.AddNode('s', 34);
-    g.AddNode('b', 6);
-    g.AddNode('c');
-    g.AddEdge(g1, g3, 17);
-    g.AddEdge(g3, g1, 18);
-    g.AddEdge(g1, g5);
-    g.AddEdge(g6, g1);
-    GraphEdge *ge = g.AddEdge(g6, g3);
-
-    cout<<g.NodesToString()<<endl;
-    cout<<endl<<endl;
-    cout<<g.ToString();
-    //cout<<g.GraphNodeToString(g3) << endl;
-    const vector<GraphNode*>& gf = g.GetNodes();
-
-    for(unsigned int i = 0; i < gf.size(); i++){
-        cout << g.GraphNodeToString(gf.at(i)) << endl;
-    }
-
-    cout<< g.GraphNodeToString(g.NodeAt(1)) << endl;
-    cout << g.Size() << endl;
-
-    
-}

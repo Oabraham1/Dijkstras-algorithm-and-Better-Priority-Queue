@@ -1,3 +1,6 @@
+#ifndef GRAPH_H
+#define GRAPH_H
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -42,6 +45,8 @@ class Graph{
 
 	private:
 		// Your code goes here!
-		vector<vector<GraphEdge>> adjacencyMatrix;
-		vector<GraphNode> nodeList;
+		vector<vector<GraphEdge*>> adjacencyMatrix;
+		vector<GraphNode*> nodeList;
 };
+
+#endif
