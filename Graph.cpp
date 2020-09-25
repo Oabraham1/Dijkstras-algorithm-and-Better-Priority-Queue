@@ -5,6 +5,10 @@
 
 using namespace std;
 
+/*
+ * This destructor iterates through the vector of nodes and 2D vector of edges and deallocates all of the dynamic memory used
+ * It is important that this destructor is properly written to avoid memory leaks
+*/
 
 Graph::~Graph(){
     for(unsigned int i = 0; i < nodeList.size(); i++){
@@ -25,6 +29,9 @@ Graph::~Graph(){
 
 }
 
+/*
+ * This method creates a new GraphNode and adds it to the vector of GraphNodes
+*/
 GraphNode* Graph::AddNode(char key, int data){
     GraphNode *gn = new GraphNode();
     gn->key = key;
@@ -35,6 +42,14 @@ GraphNode* Graph::AddNode(char key, int data){
     return gn;
     
 }
+
+/*
+ * This method creates a new GraphEdge that connects two nodes
+ * These nodes are then stored in what is a 2D vector of GraphEdges were they are stored
+ * based on the node where they connect from
+ * This makes it easier to get an adjacency list of all of the nodes 
+ * since the edges vector at every index simply connects nodes from the same origin
+*/
 
 GraphEdge* Graph::AddEdge(GraphNode *gn1, GraphNode *gn2, unsigned int weight){
     GraphEdge *ge = new GraphEdge();
@@ -66,6 +81,9 @@ GraphEdge* Graph::AddEdge(GraphNode *gn1, GraphNode *gn2, unsigned int weight){
     return ge;
 }
 
+/*
+ * This method returns a string representation of the distinct nodes of the graph
+*/
 string Graph::NodesToString() const{
     string result = "[";
     for(unsigned int i = 0; i < this->nodeList.size(); i++){
@@ -85,7 +103,11 @@ string Graph::NodesToString() const{
 }
 
 
-
+/*
+ * This method returns a string representation of the entire graph, showing all of the different nodes and edges
+ * It goes through the nodes vector to print each node and goes through the edges 2D vector to print the corresponding 
+ * edges(if any) for that node
+*/
 
 string Graph::ToString() const{
     string result = "";
@@ -120,6 +142,9 @@ string Graph::ToString() const{
     return result;
 }
 
+/*
+ * This method returns a string representation of any Graph node parsed into it
+*/
 string Graph::GraphNodeToString(const GraphNode *gn){
     string result = "(";
     result = result + gn->key + ":" + to_string(gn->data) + ")";
@@ -128,7 +153,10 @@ string Graph::GraphNodeToString(const GraphNode *gn){
 }
 
 
-
+/*
+ * This method returns a string representation of the graph edge parsed into it
+ * showing the different links between nodes, if ay
+*/
 string Graph::GraphEdgeToString(const GraphEdge *ge){
     string result = "[(";
     result = result + ge->from->key + ":" + to_string(ge->from->data) +") -> (" + ge->to->key + ":" + to_string(ge->to->data) + ")" + " w:" + to_string(ge->weight) + "], " ;
@@ -140,7 +168,9 @@ string Graph::GraphEdgeToString(const GraphEdge *ge){
     return result;
 }
 
-
+/*
+ * This method goes through the entire graph and get all of the edges and returns those edges
+*/
 const vector<GraphEdge*>& Graph::GetEdges(const GraphNode *gn)const{
     vector<GraphEdge*> *temp = new vector<GraphEdge*>();
     
@@ -161,7 +191,9 @@ const vector<GraphEdge*>& Graph::GetEdges(const GraphNode *gn)const{
     return result;
 }
 
-
+/*
+ * This method returns a vector of all of the Nodes of the Graph
+*/
 const vector<GraphNode*>& Graph::GetNodes() const{
     vector<GraphNode*> *temp = new vector<GraphNode*>();
 
@@ -176,7 +208,10 @@ const vector<GraphNode*>& Graph::GetNodes() const{
     return result;
 }
 
-
+/*
+ * This method returns a graphNode at a particular index
+ * Since all of the nodes are stored in a vector, of nodes, the node at that index is returned
+*/
 const GraphNode* Graph::NodeAt(unsigned int idx) const{
     if(idx >= this->nodeList.size()){
         cout << "Invalid Index" << endl;
@@ -186,7 +221,9 @@ const GraphNode* Graph::NodeAt(unsigned int idx) const{
     return (this->nodeList.at(idx));
 }
 
-
+/*
+ * This method returns the size of the graph which is the number of dinstinct node it posseses
+*/
 size_t Graph::Size() const{
     return this->nodeList.size();
 }

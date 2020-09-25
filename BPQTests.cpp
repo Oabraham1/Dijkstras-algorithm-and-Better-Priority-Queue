@@ -56,11 +56,11 @@ void UpdateTest() {
 	DNode positive;
 	positive.node = f;
 	positive.pri = 0;
-	cout << "q before: " << q.ToString() << endl;
+	//cout << "q before: " << q.ToString() << endl;
 	assert(q.Update(positive) == true);
-	cout << "q after: " << q.ToString() << endl;
+	//cout << "q after: " << q.ToString() << endl;
 	assert(q.ToString() == "[(a: 0), (b: 1), (f: 0), (d: 3), (e: 4), (c: 2)]");
-	
+
 	
 	// more tests go here...
 	
