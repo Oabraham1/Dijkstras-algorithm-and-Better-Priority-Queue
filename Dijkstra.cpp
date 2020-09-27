@@ -54,12 +54,17 @@ int dijkstra(const GraphNode *start, const GraphNode *end, Graph *g){\
 			df.node = ge.at(i)->to;
 			q->Update(df); //O(Log(V)) where V is the number of vertices in the graph. This happens in O(Log(V)) because the priority queue is a binary heap which re-adjusts when the update is called
 		}
+
+		/*
+		 * if we have reached end, then we want to update that distance to avoid updating with nodes without edges
+		*/
+		if(dn.node == end){
+			distance = dn.pri;
+		}
 		
-		distance = dn.pri;
 
 	}
 
-	
 
 	if(distance == INT_MAX){
 		cout << "No path between Nodes" << endl;
@@ -85,6 +90,11 @@ int DijkstraTest(){
 	GraphNode *d = g->AddNode('4');
 	GraphNode *e = g->AddNode('5');
 	GraphNode *f = g->AddNode('6');
+	/*
+	 * Extra nodes without edges to check if our code returns the correct value
+	*/
+	GraphNode *h = g->AddNode('7');
+	GraphNode *i = g->AddNode('8');
 	
 	g->AddEdge(a, b, 7);
 	g->AddEdge(b, a, 7);
