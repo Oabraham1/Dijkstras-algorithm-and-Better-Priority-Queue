@@ -49,8 +49,8 @@ int BetterPriorityQueue::Contains(DNode dn){
  * This method returns a string representation of a D(Dijkstra's??)Node
 */
 string BetterPriorityQueue::DnodeToString(DNode dn){
-    static string result = "(";
-    result = result + dn.node->key + ": " + to_string(dn.pri) + ")";
+    string result;
+    result = result + "(" + dn.node->key + ": " + to_string(dn.pri) + ")";
     
 
     return result; 

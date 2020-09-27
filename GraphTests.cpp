@@ -29,6 +29,45 @@ void TestAddNode(){
 	
 	cout << "PASSED!" << endl << endl;
 }
+void TestGetEdges(){
+	cout << "Testing GetEdges..." << endl;
+	Graph g = Graph();
+	GraphNode *gn1 = g.AddNode('a', 15);
+	GraphNode *gn2 = g.AddNode('b', 12);
+	GraphNode *gn3 = g.AddNode('c', 9);
+
+	GraphEdge *e1 = g.AddEdge(gn1, gn3, 2);
+	g.AddEdge(gn3, gn2);
+	GraphEdge *e3 = g.AddEdge(gn1, gn2, 8);
+	
+	
+	vector<GraphEdge*> edges = g.GetEdges(gn1);
+	// cout << "Edges: " << vec_to_string(edges) << endl;
+	vector<GraphEdge*> soln = {e1, e3};
+	assert(edges == soln);
+	
+	cout << "PASSED!" << endl << endl;
+}
+
+
+void TestGetNodes(){
+	cout << "Testing GetNodes..." << endl;
+		
+	Graph g = Graph();
+	GraphNode *gn1 = g.AddNode('a', 15);
+	GraphNode *gn2 = g.AddNode('b', 12);
+	GraphNode *gn3 = g.AddNode('c', 9);
+
+	
+	
+	vector<GraphNode*> nodes = g.GetNodes();
+	// cout << "Edges: " << vec_to_string(edges) << endl;
+	vector<GraphNode*> soln = {gn1, gn2, gn3};
+	assert(nodes == soln);
+	
+	
+	cout << "PASSED!" << endl << endl;
+}
 
 
 void TestAddEdge(){
@@ -101,6 +140,8 @@ int main(){
 	TestAddNode();
 	TestAddEdge();
 	TestDestructor();
+	TestGetEdges();
+	TestGetNodes();
 
 	// ... more tests ... 
 
